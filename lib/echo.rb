@@ -6,8 +6,18 @@ class Echo < Sinatra::Base
   set :root, File.join(File.dirname(__FILE__), '..')
   set :public_folder, File.join(root, 'public')
   
-  get '/' do
-    dump = PP.pp(request, '')
-    erb :index, :locals => { :dump => dump }, :content_type => 'text/plain'
+  before do
+    @dump = PP.pp(request, '')
+  end
+  
+  def self.get_or_post(path, opts={}, &block)
+    get(path, opts, &block)
+    post(path, opts, &block)
+    put(path, opts, &block)
+    delete(path, opts, &block)
+  end
+  
+  self::get_or_post '/' do
+    erb :index, :locals => { :dump => @dump }, :content_type => 'text/plain'
   end
 end
