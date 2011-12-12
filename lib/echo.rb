@@ -10,14 +10,14 @@ class Echo < Sinatra::Base
     @dump = PP.pp(request, '')
   end
   
-  def self.get_or_post(path, opts={}, &block)
+  def self.match_all(path, opts={}, &block)
     get(path, opts, &block)
     post(path, opts, &block)
     put(path, opts, &block)
     delete(path, opts, &block)
   end
   
-  self::get_or_post '/' do
+  self::match_all '/' do
     erb :index, :locals => { :dump => @dump }, :content_type => 'text/plain'
   end
 end
